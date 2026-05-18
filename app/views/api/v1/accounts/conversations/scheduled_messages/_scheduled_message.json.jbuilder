@@ -1,0 +1,10 @@
+json.id scheduled_message.id
+json.conversation_id scheduled_message.conversation_id
+json.content scheduled_message.content
+json.content_attributes scheduled_message.content_attributes
+json.message_type scheduled_message.message_type
+json.send_at scheduled_message.send_at
+json.status scheduled_message.status
+json.sender_id scheduled_message.sender_id
+json.sent_message_id scheduled_message.sent_message_id
+json.created_at scheduled_message.created_at

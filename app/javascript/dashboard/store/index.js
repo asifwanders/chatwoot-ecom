@@ -31,6 +31,9 @@ import customRole from './modules/customRole';
 import customViews from './modules/customViews';
 import dashboardApps from './modules/dashboardApps';
 import draftMessages from './modules/draftMessages';
+// FORK:BEGIN — scheduled messages Vuex module
+import scheduledMessages from './modules/scheduledMessages';
+// FORK:END
 import globalConfig from 'shared/store/globalConfig';
 import inboxAssignableAgents from './modules/inboxAssignableAgents';
 import inboxes from './modules/inboxes';
@@ -94,6 +97,9 @@ export default createStore({
     customViews,
     dashboardApps,
     draftMessages,
+    // FORK:BEGIN — scheduled messages module registration
+    scheduledMessages,
+    // FORK:END
     globalConfig,
     inboxAssignableAgents,
     inboxes,

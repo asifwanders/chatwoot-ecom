@@ -27,6 +27,13 @@ class AutomationRules::ConditionsFilterService < FilterService
 
     @attribute_changed_query_filter = []
 
+    # FORK:BEGIN — custom_attribute_changed_to is evaluated in-memory against
+    # previous_changes (not expressible in SQL). Fail fast on mismatch; the
+    # main SQL pass below silently ignores the unrecognized attribute_key.
+    fork_inmem = @rule.conditions.select { |c| c['attribute_key'] == 'custom_attribute_changed_to' }
+    return false if fork_inmem.any? && !fork_evaluate_custom_attribute_transitions(fork_inmem)
+    # FORK:END
+
     @rule.conditions.each_with_index do |query_hash, current_index|
       @attribute_changed_query_filter << query_hash and next if query_hash['filter_operator'] == 'attribute_changed'
 
@@ -207,4 +214,36 @@ class AutomationRules::ConditionsFilterService < FilterService
   def label_conditions?
     @rule.conditions.any? { |condition| condition['attribute_key'] == 'labels' }
   end
+
+  # FORK:BEGIN — custom_attribute_changed_to evaluator
+  # Reads @changed_attributes['custom_attributes'] (shape: [old_hash, new_hash])
+  # and matches each condition's values hash:
+  #   { attribute_key: 'order_status', to: 'shipped', from: 'packed'(optional) }
+  def fork_evaluate_custom_attribute_transitions(conditions)
+    diff = (@changed_attributes || {}).with_indifferent_access['custom_attributes']
+    return false if diff.blank?
+
+    old_attrs = (diff[0] || {})
+    new_attrs = (diff[1] || {})
+
+    conditions.all? do |cond|
+      params = cond['values']
+      params = params.first if params.is_a?(Array)
+      if params.is_a?(String)
+        params = (JSON.parse(params) rescue {})
+      end
+      params = (params || {}).with_indifferent_access
+      key = params[:attribute_key]
+      next false if key.blank?
+
+      to_value = params[:to]
+      from_value = params[:from]
+      new_v = new_attrs[key]
+      old_v = old_attrs[key]
+      matches_to = to_value.blank? || new_v.to_s == to_value.to_s
+      matches_from = from_value.blank? || old_v.to_s == from_value.to_s
+      matches_to && matches_from && old_v != new_v
+    end
+  end
+  # FORK:END
 end

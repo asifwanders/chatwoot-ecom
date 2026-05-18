@@ -93,7 +93,8 @@ export default {
       return this.actionTypes.map(a => ({ id: a.key, name: a.label }));
     },
     isVerticalLayout() {
-      return ['team_message', 'textarea'].includes(this.inputType);
+      // FORK: schedule_message + fallback_strategy use vertical layout
+      return ['team_message', 'textarea', 'schedule_message', 'fallback_strategy'].includes(this.inputType);
     },
     castMessageVmodel: {
       get() {
@@ -104,6 +105,17 @@ export default {
       },
       set(value) {
         this.action_params = value;
+      },
+    },
+    // FORK: hash-shaped action_params wrapped in a 1-element array so the
+    // form-level validator (`actions[0].action_params.length`) passes.
+    forkHashParams: {
+      get() {
+        const v = Array.isArray(this.action_params) ? this.action_params[0] : this.action_params;
+        return v && typeof v === 'object' ? v : {};
+      },
+      set(value) {
+        this.action_params = [value];
       },
     },
   },
@@ -186,6 +198,36 @@ export default {
         :teams="dropdownValues"
         :dropdown-max-height="dropdownMaxHeight"
       />
+      <!-- FORK:BEGIN — schedule_message + fallback_strategy inputs -->
+      <div v-if="inputType === 'schedule_message'" class="flex flex-col gap-2">
+        <label class="text-xs text-n-slate-11">{{ $t('AUTOMATION.ACTION.SCHEDULE_OFFSET_LABEL') }}</label>
+        <input
+          :value="forkHashParams.offset_seconds"
+          type="number"
+          min="0"
+          class="rounded border border-n-weak bg-n-solid-1 px-2 py-1 text-sm"
+          @input="forkHashParams = { ...forkHashParams, offset_seconds: Number($event.target.value) }"
+        />
+        <label class="text-xs text-n-slate-11">{{ $t('AUTOMATION.ACTION.SCHEDULE_TEMPLATE_LABEL') }}</label>
+        <textarea
+          :value="forkHashParams.content_template"
+          rows="3"
+          class="rounded border border-n-weak bg-n-solid-1 px-2 py-1 text-sm"
+          @input="forkHashParams = { ...forkHashParams, content_template: $event.target.value }"
+        />
+      </div>
+      <select
+        v-if="inputType === 'fallback_strategy'"
+        :value="forkHashParams.fallback"
+        class="rounded border border-n-weak bg-n-solid-1 px-2 py-1 text-sm"
+        @change="forkHashParams = { ...forkHashParams, fallback: $event.target.value }"
+      >
+        <option value="round_robin_previous_team">round_robin_previous_team</option>
+        <option value="leave_unassigned">leave_unassigned</option>
+        <option value="keep_current">keep_current</option>
+        <option value="leave_current">leave_current</option>
+      </select>
+      <!-- FORK:END -->
       <WootMessageEditor
         v-if="inputType === 'textarea'"
         v-model="castMessageVmodel"

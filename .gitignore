@@ -104,3 +104,8 @@ CLAUDE.local.md
 .pnpm-store/*
 local/
 Procfile.worktree
+
+# FORK: SSH keys and private certs at repo root must not be committable.
+# Allow the legitimate vendored RDS CA bundle.
+*.pem
+!config/rds-ca-2019-root.pem

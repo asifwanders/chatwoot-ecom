@@ -290,6 +290,14 @@ export const AUTOMATIONS = {
   },
   conversation_updated: {
     conditions: [
+      // FORK:BEGIN — custom_attribute_changed_to (transition condition)
+      {
+        key: 'custom_attribute_changed_to',
+        name: 'CUSTOM_ATTRIBUTE_CHANGED_TO',
+        inputType: 'custom_attribute_changed_to',
+        filterOperators: OPERATOR_TYPES_1,
+      },
+      // FORK:END
       {
         key: 'status',
         name: 'STATUS',
@@ -805,4 +813,21 @@ export const AUTOMATION_ACTION_TYPES = [
     label: 'ADD_SLA',
     inputType: 'search_select',
   },
+  // FORK:BEGIN — fork-only automation actions (schedule + assign previous)
+  {
+    key: 'schedule_message',
+    label: 'SCHEDULE_MESSAGE',
+    inputType: 'schedule_message',
+  },
+  {
+    key: 'assign_previous_agent',
+    label: 'ASSIGN_PREVIOUS_AGENT',
+    inputType: 'fallback_strategy',
+  },
+  {
+    key: 'assign_previous_team',
+    label: 'ASSIGN_PREVIOUS_TEAM',
+    inputType: 'fallback_strategy',
+  },
+  // FORK:END
 ];

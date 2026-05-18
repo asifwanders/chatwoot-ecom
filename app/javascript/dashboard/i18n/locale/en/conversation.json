@@ -202,6 +202,13 @@
       "CLICK_HERE": "Click here to update",
       "WHATSAPP_TEMPLATES": "Whatsapp Templates"
     },
+    "SCHEDULED_MESSAGES": {
+      "TITLE": "Schedule send",
+      "HEADER": "Scheduled messages",
+      "CANCEL": "Cancel",
+      "SAVE": "Schedule",
+      "CUSTOM_LABEL": "Or pick a date & time"
+    },
     "REPLYBOX": {
       "REPLY": "Reply",
       "PRIVATE_NOTE": "Private Note",

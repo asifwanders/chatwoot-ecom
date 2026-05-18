@@ -35,15 +35,21 @@ class AutomationRule < ApplicationRecord
   scope :active, -> { where(active: true) }
 
   def conditions_attributes
+    # FORK:BEGIN — append custom_attribute_changed_to (transition condition)
     %w[content email country_code status message_type browser_language assignee_id team_id referer city company_name inbox_id
-       mail_subject phone_number priority conversation_language labels private_note]
+       mail_subject phone_number priority conversation_language labels private_note
+       custom_attribute_changed_to]
+    # FORK:END
   end
 
   def actions_attributes
+    # FORK:BEGIN — append schedule_message, assign_previous_agent, assign_previous_team
     %w[send_message add_label remove_label send_email_to_team assign_team assign_agent remove_assigned_agent
        remove_assigned_team send_webhook_event mute_conversation send_attachment change_status resolve_conversation
        open_conversation pending_conversation snooze_conversation change_priority send_email_transcript
-       add_private_note].freeze
+       add_private_note
+       schedule_message assign_previous_agent assign_previous_team].freeze
+    # FORK:END
   end
 
   def file_base_data

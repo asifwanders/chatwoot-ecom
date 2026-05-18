@@ -35,6 +35,11 @@ class AutomationRules::ConditionValidationService
   def valid_condition?(condition)
     key = condition['attribute_key']
 
+    # FORK:BEGIN — fork-only transition condition, evaluated in-memory in
+    # ConditionsFilterService#fork_evaluate_custom_attribute_transitions.
+    return true if key == 'custom_attribute_changed_to'
+    # FORK:END
+
     conversation_filter = @conversation_filters[key]
     contact_filter = @contact_filters[key]
     message_filter = @message_filters[key]

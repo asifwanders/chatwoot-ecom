@@ -126,12 +126,21 @@ export default {
       type: Boolean,
       default: false,
     },
+    // FORK:BEGIN — schedule-send affordance toggle
+    showScheduleSendButton: {
+      type: Boolean,
+      default: false,
+    },
+    // FORK:END
   },
   emits: [
     'toggleInsertArticle',
     'selectWhatsappTemplate',
     'selectContentTemplate',
     'toggleQuotedReply',
+    // FORK:BEGIN
+    'toggleScheduleSend',
+    // FORK:END
   ],
   setup(props) {
     const { setSignatureFlagForInbox, fetchSignatureFlagFromUISettings } =
@@ -357,6 +366,17 @@ export default {
         :aria-pressed="quotedReplyEnabled"
         @click="$emit('toggleQuotedReply')"
       />
+      <!-- FORK:BEGIN — schedule send button -->
+      <NextButton
+        v-if="showScheduleSendButton"
+        v-tooltip.top-end="$t('CONVERSATION.SCHEDULED_MESSAGES.TITLE')"
+        icon="i-ph-clock"
+        slate
+        faded
+        sm
+        @click="$emit('toggleScheduleSend')"
+      />
+      <!-- FORK:END -->
       <NextButton
         v-if="enableWhatsAppTemplates"
         v-tooltip.top-end="$t('CONVERSATION.FOOTER.WHATSAPP_TEMPLATES')"

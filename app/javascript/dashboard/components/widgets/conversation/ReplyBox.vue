@@ -17,6 +17,10 @@ import CopilotEditorSection from './CopilotEditorSection.vue';
 import MessageSignatureMissingAlert from './MessageSignatureMissingAlert.vue';
 import ReplyBoxBanner from './ReplyBoxBanner.vue';
 import QuotedEmailPreview from './QuotedEmailPreview.vue';
+// FORK:BEGIN — scheduled messages composer affordances
+import ScheduledMessagesList from './ScheduledMessagesList.vue';
+import ScheduleSendPopover from './ScheduleSendPopover.vue';
+// FORK:END
 import { REPLY_EDITOR_MODES } from 'dashboard/components/widgets/WootWriter/constants';
 import WootMessageEditor from 'dashboard/components/widgets/WootWriter/Editor.vue';
 import AudioRecorder from 'dashboard/components/widgets/WootWriter/AudioRecorder.vue';
@@ -76,6 +80,10 @@ export default {
     WhatsappTemplates,
     WootMessageEditor,
     QuotedEmailPreview,
+    // FORK:BEGIN
+    ScheduledMessagesList,
+    ScheduleSendPopover,
+    // FORK:END
     CopilotEditorSection,
     CopilotReplyBottomPanel,
   },
@@ -134,6 +142,9 @@ export default {
       showArticleSearchPopover: false,
       hasRecordedAudio: false,
       copilotAcceptedMessages: {},
+      // FORK:BEGIN — scheduled messages popover state
+      showScheduleSendPopover: false,
+      // FORK:END
     };
   },
   computed: {
@@ -1218,7 +1229,17 @@ export default {
 
 <template>
   <ReplyBoxBanner :message="message" :is-on-private-note="isOnPrivateNote" />
+  <!-- FORK:BEGIN — scheduled messages list above composer + schedule popover -->
+  <ScheduledMessagesList :conversation-id="conversationId" />
   <div ref="replyEditor" class="reply-box" :class="replyBoxClass">
+    <ScheduleSendPopover
+      v-if="showScheduleSendPopover"
+      :conversation-id="conversationId"
+      :content="message"
+      @scheduled="message = ''"
+      @close="showScheduleSendPopover = false"
+    />
+    <!-- FORK:END -->
     <ReplyTopPanel
       :mode="replyType"
       :conversation-id="conversationId"
@@ -1402,6 +1423,8 @@ export default {
         @select-content-template="openContentTemplateModal"
         @toggle-insert-article="toggleInsertArticle"
         @toggle-quoted-reply="toggleQuotedReply"
+        :show-schedule-send-button="!isPrivate"
+        @toggle-schedule-send="showScheduleSendPopover = !showScheduleSendPopover"
       />
     </Transition>
 

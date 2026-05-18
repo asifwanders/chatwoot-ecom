@@ -64,4 +64,27 @@ class AutomationRules::ActionService < ActionService
       @account.increment_email_sent_count
     end
   end
+
+  # FORK:BEGIN — dispatchers for fork-only actions (services hold the logic)
+  def schedule_message(params)
+    payload = params.is_a?(Array) ? (params[0] || {}) : (params || {})
+    AutomationRules::Actions::ScheduleMessageService.new(
+      rule: @rule, conversation: @conversation, params: payload.with_indifferent_access
+    ).perform
+  end
+
+  def assign_previous_agent(params)
+    payload = params.is_a?(Array) ? (params[0] || {}) : (params || {})
+    AutomationRules::Actions::AssignPreviousAgentService.new(
+      rule: @rule, conversation: @conversation, params: payload.with_indifferent_access
+    ).perform
+  end
+
+  def assign_previous_team(params)
+    payload = params.is_a?(Array) ? (params[0] || {}) : (params || {})
+    AutomationRules::Actions::AssignPreviousTeamService.new(
+      rule: @rule, conversation: @conversation, params: payload.with_indifferent_access
+    ).perform
+  end
+  # FORK:END
 end

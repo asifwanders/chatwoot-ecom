@@ -11,6 +11,9 @@ class AsyncDispatcher < BaseDispatcher
   def listeners
     [
       AutomationRuleListener.instance,
+      # FORK:BEGIN — return-to-agent: append assignment-history rows
+      ConversationAssignmentHistoryListener.instance,
+      # FORK:END
       CampaignListener.instance,
       CsatSurveyListener.instance,
       HookListener.instance,

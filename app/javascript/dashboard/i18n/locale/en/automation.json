@@ -99,7 +99,9 @@
       "TEAM_MESSAGE_INPUT_PLACEHOLDER": "Enter your message here",
       "TEAM_DROPDOWN_PLACEHOLDER": "Select teams",
       "EMAIL_INPUT_PLACEHOLDER": "Enter email",
-      "URL_INPUT_PLACEHOLDER": "Enter URL"
+      "URL_INPUT_PLACEHOLDER": "Enter URL",
+      "SCHEDULE_OFFSET_LABEL": "Offset (seconds from now)",
+      "SCHEDULE_TEMPLATE_LABEL": "Message template (supports {{contact.name}})"
     },
     "TOGGLE": {
       "ACTIVATION_TITLE": "Activate Automation Rule",
@@ -157,7 +159,10 @@
       "CHANGE_PRIORITY": "Change Priority",
       "ADD_SLA": "Add SLA",
       "OPEN_CONVERSATION": "Open conversation",
-      "PENDING_CONVERSATION": "Mark conversation as pending"
+      "PENDING_CONVERSATION": "Mark conversation as pending",
+      "SCHEDULE_MESSAGE": "Schedule a Message",
+      "ASSIGN_PREVIOUS_AGENT": "Assign to Previous Agent",
+      "ASSIGN_PREVIOUS_TEAM": "Assign to Previous Team"
     },
     "MESSAGE_TYPES": {
       "INCOMING": "Incoming Message",
@@ -171,6 +176,7 @@
       "URGENT": "Urgent"
     },
     "ATTRIBUTES": {
+      "CUSTOM_ATTRIBUTE_CHANGED_TO": "Custom Attribute Transitioned To (JSON)",
       "MESSAGE_TYPE": "Message Type",
       "PRIVATE_NOTE": "Private Note",
       "MESSAGE_CONTAINS": "Message Contains",
