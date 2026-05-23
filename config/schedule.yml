@@ -62,6 +62,13 @@ scheduled_messages_sweeper_job:
   queue: scheduled_jobs
 # FORK:END
 
+# FORK:BEGIN — Evolution WhatsApp health check
+evolution_health_check_job:
+  cron: '*/5 * * * *'
+  class: 'Evolution::HealthCheckJob'
+  queue: scheduled_jobs
+# FORK:END
+
 # executed every 30 minutes for assignment_v2
 periodic_assignment_job:
   cron: '*/30 * * * *'

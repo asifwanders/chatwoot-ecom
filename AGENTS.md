@@ -66,7 +66,6 @@
 
 - Prefer Conventional Commits: `type(scope): subject` (scope optional)
 - Example: `feat(auth): add user authentication`
-- Don't reference Claude in commit messages
 
 ## PR Description Format
 

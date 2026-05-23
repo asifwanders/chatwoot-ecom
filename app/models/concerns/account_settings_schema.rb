@@ -39,7 +39,10 @@ module AccountSettingsSchema
             'help_center_search': { 'type': %w[boolean null] }
           },
           'additionalProperties': false
-        }
+        },
+        # FORK:BEGIN — agent signature toggle
+        'prepend_agent_signature': { 'type': %w[boolean null] }
+        # FORK:END
       },
     'required': [],
     'additionalProperties': true

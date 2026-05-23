@@ -247,7 +247,9 @@
           "WHATSAPP_CLOUD": "WhatsApp Cloud",
           "WHATSAPP_CLOUD_DESC": "Quick setup through Meta",
           "TWILIO_DESC": "Connect via Twilio credentials",
-          "360_DIALOG": "360Dialog"
+          "360_DIALOG": "360Dialog",
+          "EVOLUTION": "WhatsApp (QR Login)",
+          "EVOLUTION_DESC": "Quick setup by scanning a QR code from WhatsApp on your phone. No Meta Business approval required."
         },
         "SELECT_PROVIDER": {
           "TITLE": "Select your API provider",
@@ -321,6 +323,40 @@
         },
         "API": {
           "ERROR_MESSAGE": "We were not able to save the WhatsApp channel"
+        },
+        "EVOLUTION": {
+          "TITLE": "Connect WhatsApp via QR",
+          "DESCRIPTION": "Scan the QR code from your WhatsApp mobile app to link this inbox. The connection runs through Evolution API.",
+          "NAME_LABEL": "Inbox name",
+          "NAME_PLACEHOLDER": "e.g. Sales WhatsApp",
+          "PHONE_LABEL": "Phone number (with country code)",
+          "PHONE_PLACEHOLDER": "+923001234567",
+          "PHONE_HINT": "Use E.164 format. Must match the WhatsApp number you'll scan from.",
+          "SUBMIT": "Connect WhatsApp",
+          "CREATING": "Provisioning…",
+          "ERROR_CREATE": "Could not provision WhatsApp instance",
+          "QR_MODAL": {
+            "TITLE": "Scan the QR code",
+            "DESCRIPTION_SETUP": "Open WhatsApp on your phone → Settings → Linked Devices → Link a Device. Then scan this QR.",
+            "DESCRIPTION_RECONNECT": "Your WhatsApp connection dropped. Scan this QR to re-link.",
+            "PAIRING_CODE_LABEL": "Or enter this pairing code in WhatsApp:",
+            "REFRESHING_IN": "Refreshes in {seconds}s",
+            "REFRESH_NOW": "Refresh QR",
+            "STATUS_CONNECTING": "Waiting for scan…",
+            "STATUS_OPEN": "Connected!",
+            "STATUS_CLOSE": "Connection failed. Refresh the QR and try again.",
+            "CLOSE": "Close"
+          },
+          "STATUS_BANNER": {
+            "CONNECTED": "WhatsApp connected",
+            "DISCONNECTED": "WhatsApp disconnected",
+            "CONNECTING": "WhatsApp connecting…",
+            "RECONNECT": "Reconnect",
+            "DISCONNECT": "Disconnect",
+            "DISCONNECT_CONFIRM": "Disconnect this WhatsApp number? You will need to scan the QR again to re-link.",
+            "DISCONNECTED_HELP": "Customers cannot reach this inbox until you reconnect.",
+            "ERROR_DISCONNECT": "Could not disconnect WhatsApp"
+          }
         }
       },
       "VOICE": {

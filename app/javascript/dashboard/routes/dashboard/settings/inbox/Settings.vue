@@ -16,6 +16,9 @@ import DuplicateInboxBanner from './channels/instagram/DuplicateInboxBanner.vue'
 import MicrosoftReauthorize from './channels/microsoft/Reauthorize.vue';
 import GoogleReauthorize from './channels/google/Reauthorize.vue';
 import WhatsappReauthorize from './channels/whatsapp/Reauthorize.vue';
+// FORK:BEGIN — Evolution status banner
+import EvolutionStatusBanner from './components/EvolutionStatusBanner.vue';
+// FORK:END
 import InboxHealthAPI from 'dashboard/api/inboxHealth';
 import PreChatFormSettings from './PreChatForm/Settings.vue';
 import WeeklyAvailability from './components/WeeklyAvailability.vue';
@@ -66,6 +69,9 @@ export default {
     InstagramReauthorize,
     TiktokReauthorize,
     WhatsappReauthorize,
+    // FORK:BEGIN — Evolution status banner
+    EvolutionStatusBanner,
+    // FORK:END
     DuplicateInboxBanner,
     Editor,
     Avatar,
@@ -713,6 +719,17 @@ export default {
           class="mb-4"
           :class="bannerMaxWidth"
         />
+        <!-- FORK:BEGIN — Evolution status banner -->
+        <EvolutionStatusBanner
+          v-if="
+            inbox.channel_type === 'Channel::Whatsapp' &&
+            inbox.provider === 'evolution'
+          "
+          :channel="inbox"
+          class="mx-6 mb-4"
+          :class="bannerMaxWidth"
+        />
+        <!-- FORK:END -->
         <DuplicateInboxBanner
           v-if="hasDuplicateInstagramInbox"
           :content="$t('INBOX_MGMT.ADD.INSTAGRAM.DUPLICATE_INBOX_BANNER')"

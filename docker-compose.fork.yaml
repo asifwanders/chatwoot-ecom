@@ -1,0 +1,124 @@
+version: '3'
+
+services:
+  base: &base
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    image: chatwoot-ecom:fork
+    env_file: .env
+    volumes:
+      - storage_data:/app/storage
+
+  rails:
+    <<: *base
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    ports:
+      - '127.0.0.1:3000:3000'
+    environment:
+      - NODE_ENV=production
+      - RAILS_ENV=production
+      - INSTALLATION_ENV=docker
+    entrypoint: docker/entrypoints/rails.sh
+    command: ['bundle', 'exec', 'rails', 's', '-p', '3000', '-b', '0.0.0.0']
+    restart: always
+
+  sidekiq:
+    <<: *base
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    environment:
+      - NODE_ENV=production
+      - RAILS_ENV=production
+      - INSTALLATION_ENV=docker
+    command: ['bundle', 'exec', 'sidekiq', '-C', 'config/sidekiq.yml']
+    restart: always
+
+  postgres:
+    image: pgvector/pgvector:pg16
+    restart: always
+    ports:
+      - '127.0.0.1:5432:5432'
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=chatwoot
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:alpine
+    restart: always
+    command: ["sh", "-c", "redis-server --requirepass \"$REDIS_PASSWORD\""]
+    env_file: .env
+    volumes:
+      - redis_data:/data
+    ports:
+      - '127.0.0.1:6379:6379'
+
+  # FORK:BEGIN — Evolution-API WhatsApp provider service stack
+  evolution-db-init:
+    image: postgres:16-alpine
+    restart: 'no'
+    env_file: .env
+    command:
+      - sh
+      - -c
+      - |
+        until PGPASSWORD="$$POSTGRES_PASSWORD" psql -h postgres -U postgres -c '\q' 2>/dev/null; do sleep 1; done
+        PGPASSWORD="$$POSTGRES_PASSWORD" psql -h postgres -U postgres -tc "SELECT 1 FROM pg_database WHERE datname='evolution'" | grep -q 1 \
+          || PGPASSWORD="$$POSTGRES_PASSWORD" psql -h postgres -U postgres -c 'CREATE DATABASE evolution'
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  evolution-api:
+    image: evolution-api-ecom:v237
+    restart: always
+    env_file: .env
+    environment:
+      - AUTHENTICATION_API_KEY=${EVOLUTION_API_KEY}
+      - DATABASE_ENABLED=true
+      - DATABASE_PROVIDER=postgresql
+      - DATABASE_CONNECTION_URI=postgresql://postgres:${POSTGRES_PASSWORD}@postgres:5432/evolution
+      - CACHE_REDIS_ENABLED=true
+      - CACHE_REDIS_URI=redis://:${REDIS_PASSWORD}@redis:6379/1
+      - CACHE_REDIS_PREFIX_KEY=evolution
+      - WEBHOOK_GLOBAL_ENABLED=false
+      - LANGUAGE=en
+      - LOG_LEVEL=ERROR
+      - LOG_COLOR=true
+      - INSTANCE_EXPIRATION_TIME=false
+      - DEL_INSTANCE=false
+      - CONFIG_SESSION_PHONE_CLIENT=Chatwoot-Ecom
+      - CONFIG_SESSION_PHONE_NAME=Chrome
+    volumes:
+      - evolution_instances:/evolution/instances
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_started
+      evolution-db-init:
+        condition: service_completed_successfully
+  # FORK:END
+
+volumes:
+  storage_data:
+  postgres_data:
+  redis_data:
+  # FORK:BEGIN — Evolution sessions
+  evolution_instances:
+  # FORK:END

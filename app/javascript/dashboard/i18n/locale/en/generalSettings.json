@@ -96,6 +96,14 @@
         "LABEL": "Exclude unattended conversations",
         "HELP": "When enabled, the system will skip resolving conversations that are still waiting for an agent's reply."
       },
+      "AGENT_SIGNATURE": {
+        "TITLE": "Agent signature",
+        "SUBTITLE": "Prepend the sending agent's name and team name on top of every outgoing message.",
+        "ENABLED_LABEL": "Enable agent signature",
+        "SAVE": "Save",
+        "SAVED": "Agent signature setting updated",
+        "ERROR": "Could not update agent signature setting"
+      },
       "AUDIO_TRANSCRIPTION": {
         "TITLE": "Transcribe Audio Messages",
         "NOTE": "Automatically transcribe audio messages in conversations. Generate a text transcript whenever an audio message is sent or received, and display it alongside the message.",

@@ -109,3 +109,4 @@ Procfile.worktree
 # Allow the legitimate vendored RDS CA bundle.
 *.pem
 !config/rds-ca-2019-root.pem
+CLAUDE.md

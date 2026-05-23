@@ -475,6 +475,18 @@ Rails.application.routes.draw do
     namespace :v2 do
       resources :accounts, only: [:create] do
         scope module: :accounts do
+          # FORK:BEGIN — Evolution WhatsApp channel management
+          namespace :channels do
+            resources :whatsapp_evolution_channels, only: [:create] do
+              member do
+                get :qr
+                get :status
+                post :reconnect
+                post :disconnect
+              end
+            end
+          end
+          # FORK:END
           resources :summary_reports, only: [] do
             collection do
               get :agent
@@ -614,6 +626,9 @@ Rails.application.routes.draw do
   post 'webhooks/sms/:phone_number', to: 'webhooks/sms#process_payload'
   get 'webhooks/whatsapp/:phone_number', to: 'webhooks/whatsapp#verify'
   post 'webhooks/whatsapp/:phone_number', to: 'webhooks/whatsapp#process_payload'
+  # FORK:BEGIN — Evolution WhatsApp webhook
+  post 'webhooks/evolution/:instance_name', to: 'webhooks/evolution#process_payload'
+  # FORK:END
   get 'webhooks/instagram', to: 'webhooks/instagram#verify'
   post 'webhooks/instagram', to: 'webhooks/instagram#events'
   post 'webhooks/tiktok', to: 'webhooks/tiktok#events'

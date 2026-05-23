@@ -15,6 +15,9 @@ import AccountId from './components/AccountId.vue';
 import BuildInfo from './components/BuildInfo.vue';
 import AccountDelete from './components/AccountDelete.vue';
 import AudioTranscription from './components/AudioTranscription.vue';
+// FORK:BEGIN — agent signature section
+import AgentSignature from './components/AgentSignature.vue';
+// FORK:END
 import SectionLayout from './components/SectionLayout.vue';
 
 export default {
@@ -25,6 +28,9 @@ export default {
     BuildInfo,
     AccountDelete,
     AudioTranscription,
+    // FORK:BEGIN — agent signature section
+    AgentSignature,
+    // FORK:END
     SectionLayout,
     WithLabel,
     NextInput,
@@ -238,6 +244,9 @@ export default {
       <woot-loading-state v-if="uiFlags.isFetchingItem" />
     </div>
     <AudioTranscription v-if="showAudioTranscriptionConfig" />
+    <!-- FORK:BEGIN — agent signature section -->
+    <AgentSignature />
+    <!-- FORK:END -->
     <AccountId />
     <div v-if="!uiFlags.isFetchingItem && isOnChatwootCloud">
       <AccountDelete />
